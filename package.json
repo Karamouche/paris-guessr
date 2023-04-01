@@ -1,9 +1,9 @@
 {
-  "name": "parisguessr",
+  "name": "paris-guessr",
   "version": "1.0.0",
   "main": "index.js",
   "repository": "https://github.com/Karamouche/parisguessr.git",
-  "author": "Karamouche <62983822+Karamouche@users.noreply.github.com>",
+  "author": "Karamouche",
   "license": "MIT",
   "dependencies": {
     "ramda": "^0.28.0"
