@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<link rel="stylesheet" href="/public/css/style.css">
+	<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css"
+		  integrity="sha256-kLaT2GOSpHechhsozzB+flnD+zUyjE2LlfWPgU04xyI="
+		  crossorigin=""/>
+
+	<!-- Make sure you put this AFTER Leaflet's CSS -->
+	<script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"
+			integrity="sha256-WBkoXOwTeyKclOHuWtc+i2uENFpDZ9YPdf5Hf+D7ewM="
+			crossorigin=""></script>
+	<script src="/public/js/map.js"></script>
+
+	<link rel="icon" href="/public/favicon.ico">
+	<title>Paris Guessr</title>
+</head>
+<body class="center" onLoad="initMap()">
+	<h1 class="center" id="center">Paris guessr</h1>
+	<p>Guess the name of the Parisian monument</p>
+</body>
+<footer>
+	<div id="mapmain"></div>
+</footer>
+</html>
