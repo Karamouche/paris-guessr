@@ -6,7 +6,7 @@
     "start": "node server.js",
     "dev": "nodemon server.js"
   },
-  "repository": "https://github.com/Karamouche/parisguessr.git",
+  "repository": "https://github.com/Karamouche/paris-guessr.git",
   "author": "Karamouche",
   "license": "MIT",
   "dependencies": {
