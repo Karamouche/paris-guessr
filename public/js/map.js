@@ -8,10 +8,23 @@ const initMap = () => {
 		[48.75, 2.15],
 		[48.95, 2.55]
 	]);
+
+	//Differents map layers
 	const mainLayer = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
 		minZoom: map.zoom,
 		attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
 	});
+	const CartoDB_VoyagerNoLabels = L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager_nolabels/{z}/{x}/{y}{r}.png', {
+		attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
+		subdomains: 'abcd',
+		minZoom: map.zoom
+	});
+	const Esri_WorldImagery = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+		attribution: 'Tiles &copy; Esri',
+		mineZoom: map.zoom
+	});
+
+
 	mainLayer.addTo(map);
 
 	const mapContainer = $('#mapcontainer');
@@ -21,6 +34,7 @@ const initMap = () => {
 		map.invalidateSize();
 	});
 	resizeObserver.observe(mapContainer[0]);
+
 	return map;
 }
 
