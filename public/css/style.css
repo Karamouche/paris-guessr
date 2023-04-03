@@ -1,14 +1,43 @@
 body.center{
-    background-color: #849ab3;
-    padding-top: 40px;
-    padding-bottom: 40px;
-    text-align: center;
+	background-color: #849ab3;
+	padding-top: 40px;
+	padding-bottom: 40px;
+	text-align: center;
+}
+
+#mapcontainer{
+	position: absolute;
+	bottom: 0;
+	right: 0;
+	width: 50%;
+	height: 50%;
 }
 
 #mapmain{
-    position: absolute;
-    bottom: 0;
-    right: 0;
-    width: 30%;
-    height: 50%;
+	width: 600px;
+	height: 100%;
+	position: absolute;
+	bottom: 40px;
+	right: 0;
+}
+
+#guessbutton{
+	background-color: #12ff35;
+	color: #ededed;
+	text-shadow: 1px 1px 1px #000000;
+	font-weight: bold;
+	position: absolute;
+	bottom: 5px;
+	right: 0;
+	width: 600px;
+	height: 30px;
+	-webkit-border-radius: 10px;
+}
+
+#guessbutton:hover{
+	background-color: #4ece4e;
+}
+
+#guessbutton:active{
+	background-color: green;
 }
