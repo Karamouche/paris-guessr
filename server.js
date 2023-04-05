@@ -1,6 +1,7 @@
 const express = require('express');
 const fs = require('fs');
 const path = require('path');
+const monument = require('./public/js/monumentsBack.js');
 
 const app = express();
 
@@ -14,6 +15,11 @@ app.get('/', (req, res) => {
 	res.send(indexhtml);
 });
 
+//recieve post /monument
+//send random monument
+app.post('/newMonument', (req, res) => {
+	res.send(monument.randomMonument());
+});
 
 app.listen(PORT, () => {
 	console.log("##############")

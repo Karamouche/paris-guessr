@@ -47,15 +47,36 @@ const onMapClick = ({map, e}) => {
 	L.marker(e.latlng).addTo(map);
 }
 
-const onGuessClick = ({map, e}) => {
-	let marker;
-	map.eachLayer((layer) => {
-		if (layer instanceof L.Marker) {
-			marker = layer;
-		}
+
+const newMonument = () => {
+	//send POST to server to get random monument
+	$.post('/newMonument', (data) => {
+		$("#sliderimage").attr('src', data['pics'][0]);
 	});
-	if (marker) {
-		console.log(marker.getLatLng());
+}
+
+const onGuessClick = ({map, e}) => {
+	if(e.target.innerText === 'Play'){
+		//show map
+		$('#mapmain').show();
+		//change text of button
+		e.target.innerText = 'Guess';
+		$('#mapcontainer').addClass('hoverenabled');
+		//send POST to server to get random monument
+		newMonument();
+
+	}else {
+		let marker;
+		map.eachLayer((layer) => {
+			if (layer instanceof L.Marker) {
+				marker = layer;
+			}
+		});
+		if (marker) {
+			console.log(marker.getLatLng());
+			map.removeLayer(marker);
+			newMonument();
+		}
 	}
 }
 
@@ -73,7 +94,13 @@ const main = () => {
 			});
 		}
 	});
-	$('#guessbutton').on('click', (e) => onGuessClick({map, e}));
+	const guessButton = $('#guessbutton');
+	const mapContainer = $('#mapcontainer');
+	guessButton.on('click', (e) => onGuessClick({map, e}));
+	//add class .hover when hover mapcontainer
+	guessButton.text('Play');
+	$('#mapmain').hide();
+	mapContainer.removeClass('hoverenabled');
 };
 
 main();

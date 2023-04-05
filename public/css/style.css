@@ -34,7 +34,7 @@ body {
 	transition: all .2s ease-in-out;
 }
 
-#mapcontainer:hover{
+.hoverenabled:hover{
 	width: 52% !important;
 	height: 56% !important;
 }
