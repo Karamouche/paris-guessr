@@ -48,11 +48,26 @@ const onMapClick = ({map, e}) => {
 }
 
 
-const newMonument = () => {
-	//send POST to server to get random monument
-	$.post('/newMonument', (data) => {
-		$("#sliderimage").attr('src', data['pics'][0]);
+const newGame = () => {
+	$.post('/newgame', (data) => {
+		$('#sliderimage').attr('src', data[0]['pics'][0]);
+		saveDataInWindow(data);
 	});
+	window.sessionStorage.setItem('index', '-1');
+	window.sessionStorage.setItem('score', '0');
+	newRound();
+}
+
+const newRound = () => {
+	//use jose to crypt data
+	const index = Number(window.sessionStorage.getItem('index')) + 1;
+	window.sessionStorage.setItem('index', index.toString());
+	const monumentsList = JSON.parse(window.sessionStorage.getItem('monuments'));
+	$('#sliderimage').attr('src', monumentsList[index]['pics'][0]);
+}
+
+const saveDataInWindow = (data) => {
+	window.sessionStorage.setItem('monuments', JSON.stringify(data));
 }
 
 const onGuessClick = ({map, e}) => {
@@ -63,7 +78,7 @@ const onGuessClick = ({map, e}) => {
 		e.target.innerText = 'Guess';
 		$('#mapcontainer').addClass('hoverenabled');
 		//send POST to server to get random monument
-		newMonument();
+		newGame();
 
 	}else {
 		let marker;
@@ -75,7 +90,16 @@ const onGuessClick = ({map, e}) => {
 		if (marker) {
 			console.log(marker.getLatLng());
 			map.removeLayer(marker);
-			newMonument();
+			$.post('/guess', {lat: marker.getLatLng().lat, lng: marker.getLatLng().lng}, (data) => {
+				console.log(data);
+				if (data) {
+					console.log("The monument location is correct");
+					newRound();
+				}else{
+					console.log("The monument location is incorrect");
+				}
+			});
+			console.log("Remove marker and next monument");
 		}
 	}
 }
@@ -83,7 +107,7 @@ const onGuessClick = ({map, e}) => {
 const main = () => {
 	const map = initMap();
 	map.on('click', (e) => onMapClick({map, e}));
-	map.on('keypress', (e) => {
+	map.on('keypress', (e) => { //reset map view when press 'r'
 		if (e.originalEvent.key === 'r') {
 			map.eachLayer((layer) => {
 				if (layer instanceof L.Marker) {
@@ -97,10 +121,11 @@ const main = () => {
 	const guessButton = $('#guessbutton');
 	const mapContainer = $('#mapcontainer');
 	guessButton.on('click', (e) => onGuessClick({map, e}));
-	//add class .hover when hover mapcontainer
 	guessButton.text('Play');
 	$('#mapmain').hide();
-	mapContainer.removeClass('hoverenabled');
+	window.onbeforeunload = () => {
+		window.sessionStorage.clear();
+	}
 };
 
 main();

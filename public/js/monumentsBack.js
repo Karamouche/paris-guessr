@@ -19,14 +19,30 @@ const monumentsList = R.pipe(
 );
 
 //get a random monument object from the list with ramda
-const pickRandom = (list) => {
+const pickRandomFromList = (list) => {
 	const index = Math.floor(Math.random() * R.length(list));
 	return R.nth(index, list);
 }
 
-const randomMonument = () => {
-	const list = monumentsList(__dirname+'/data/monuments.json');
-	return pickRandom(list);
+const randomMonument = (monumentNElement) => {
+	const dataPath = __dirname+'/data/monuments.json';
+	const listOfMonuments = monumentsList(dataPath);
+	if (monumentNElement > R.length(listOfMonuments)) {
+		throw new Error('monumentListLength is greater than the number of monuments');
+	}
+	//return a list of random monuments of length monumentListLength all unique
+	return R.uniqWith(R.equals, R.times(() => pickRandomFromList(listOfMonuments), monumentNElement*2)).slice(0, monumentNElement);
+}
+
+const compareGpsCoordonnates = (monumentToGuess, markerGuessed) => {
+	const monumentCoord = monumentToGuess['geo_point_2d'];
+	//calcule the distance between the two points in meters
+	return R.pipe(
+		R.map(R.subtract(R.__, monumentCoord)),
+		R.map(R.pow(R.__, 2)),
+		R.sum,
+		Math.sqrt
+	)(markerGuessed);
 }
 
 module.exports = {

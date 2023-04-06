@@ -17,8 +17,14 @@ app.get('/', (req, res) => {
 
 //recieve post /monument
 //send random monument
-app.post('/newMonument', (req, res) => {
-	res.send(monument.randomMonument());
+app.post('/newgame', (req, res) => {
+	console.log(req.body);
+	res.send(monument.randomMonument(10));
+});
+
+app.post('/guess', (req, res) => {
+	console.log(req.body);
+	res.send(true);
 });
 
 app.listen(PORT, () => {
