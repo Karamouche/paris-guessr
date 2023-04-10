@@ -53,21 +53,40 @@ const newGame = () => {
 		$('#sliderimage').attr('src', data[0]['pics'][0]);
 		saveDataInWindow(data);
 	});
-	window.sessionStorage.setItem('index', '-1');
+	window.sessionStorage.setItem('index', '0');
 	window.sessionStorage.setItem('score', '0');
-	newRound();
 }
 
 const newRound = () => {
-	//use jose to crypt data
+	//TODO use jose to crypt data
 	const index = Number(window.sessionStorage.getItem('index')) + 1;
-	window.sessionStorage.setItem('index', index.toString());
-	const monumentsList = JSON.parse(window.sessionStorage.getItem('monuments'));
-	$('#sliderimage').attr('src', monumentsList[index]['pics'][0]);
+	if (index === 10){
+		//TODO send score to server
+		//TODO show score
+		//TODO show end game screen
+		alert('Fin de la partie ! Votre score est de ' + window.sessionStorage.getItem('score') + '/1000 points !');
+		$('#mapmain').hide();
+		$('#mapcontainer').removeClass('hoverenabled');
+		$('#guessbutton').text('Play');
+	}else {
+		window.sessionStorage.setItem('index', index.toString());
+		const monumentsList = JSON.parse(window.sessionStorage.getItem('monuments'));
+		$('#sliderimage').attr('src', monumentsList[index]['pics'][0]);
+	}
 }
 
 const saveDataInWindow = (data) => {
 	window.sessionStorage.setItem('monuments', JSON.stringify(data));
+}
+
+function calculateScore(distance) {
+	if (distance <= 500) {
+		return 100;
+	}else if (distance >= 5000) {
+		return 0;
+	}else{
+		return 100 - (distance - 500) / 45;
+	}
 }
 
 const onGuessClick = ({map, e}) => {
@@ -88,18 +107,26 @@ const onGuessClick = ({map, e}) => {
 			}
 		});
 		if (marker) {
-			console.log(marker.getLatLng());
+			const markerCoords = marker.getLatLng();
 			map.removeLayer(marker);
-			$.post('/guess', {lat: marker.getLatLng().lat, lng: marker.getLatLng().lng}, (data) => {
-				console.log(data);
-				if (data) {
-					console.log("The monument location is correct");
-					newRound();
-				}else{
-					console.log("The monument location is incorrect");
-				}
-			});
-			console.log("Remove marker and next monument");
+			const monumentsList = JSON.parse(window.sessionStorage.getItem('monuments'));
+			const index = window.sessionStorage.getItem('index');
+			const monument = monumentsList[index];
+			const monumentCoords = monument['geo_point_2d'];
+			const monumentName = monument['nom_carto'];
+
+			const distance = Math.round(markerCoords.distanceTo(monumentCoords));
+			const scoreMake = Math.round(calculateScore(distance));
+			if (scoreMake === 0) {
+				alert('You are too far from the monument.\n' +
+					'The monument was '+monumentName+'\n'+
+					'You make 0 points');
+			}else{
+				alert(`You are ${distance} meters from the monument.\nThe monument was ${monumentName}.\nYou make ${scoreMake} points`);
+			}
+			const score = Number(window.sessionStorage.getItem('score')) + scoreMake;
+			window.sessionStorage.setItem('score', score.toString());
+			newRound();
 		}
 	}
 }
@@ -128,4 +155,3 @@ const main = () => {
 	}
 };
 
-main();

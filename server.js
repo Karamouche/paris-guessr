@@ -22,10 +22,6 @@ app.post('/newgame', (req, res) => {
 	res.send(monument.randomMonument(10));
 });
 
-app.post('/guess', (req, res) => {
-	console.log(req.body);
-	res.send(true);
-});
 
 app.listen(PORT, () => {
 	console.log("##############")
