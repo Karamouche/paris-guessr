@@ -34,17 +34,6 @@ const randomMonument = (monumentNElement) => {
 	return R.uniqWith(R.equals, R.times(() => pickRandomFromList(listOfMonuments), monumentNElement*2)).slice(0, monumentNElement);
 }
 
-const compareGpsCoordonnates = (monumentToGuess, markerGuessed) => {
-	const monumentCoord = monumentToGuess['geo_point_2d'];
-	//calcule the distance between the two points in meters
-	return R.pipe(
-		R.map(R.subtract(R.__, monumentCoord)),
-		R.map(R.pow(R.__, 2)),
-		R.sum,
-		Math.sqrt
-	)(markerGuessed);
-}
-
 module.exports = {
 	randomMonument,
 };
